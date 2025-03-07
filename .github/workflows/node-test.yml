@@ -55,7 +55,7 @@ jobs:
     
     - name: Download build artifacts
       if: ${{ inputs.use-build-artifacts }}
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: ${{ inputs.artifact-name }}
         path: ${{ inputs.artifact-path }}
