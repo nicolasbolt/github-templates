@@ -7,6 +7,18 @@ on:
         required: false
         type: string
         default: '20'
+      upload-artifacts:
+        required: false
+        type: boolean
+        default: false
+      artifact-name:
+        required: false
+        type: string
+        default: 'build-output'
+      artifact-path:
+        required: false
+        type: string
+        default: 'dist/'
 
 jobs:
   build:
@@ -52,3 +64,10 @@ jobs:
       run: |
         if [ -f .babelrc.backup ]; then mv .babelrc.backup .babelrc; fi
         if [ -f babel.config.js.backup ]; then mv babel.config.js.backup babel.config.js; fi
+      
+    - name: Upload build artifacts
+      if: ${{ inputs.upload-artifacts }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.artifact-path }}
