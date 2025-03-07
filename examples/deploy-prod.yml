@@ -24,7 +24,8 @@ jobs:
   #     artifact-path: 'dist/'
   
   deploy:
-    needs: [build, test]
+    # needs: [build, test] # Uncomment if test job is enabled
+    needs: build
     uses: nicolasbolt/github-templates/.github/workflows/digital-ocean-deploy.yml@main
     with:
       source-path: 'dist/'
