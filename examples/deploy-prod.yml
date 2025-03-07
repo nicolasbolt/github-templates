@@ -1,0 +1,35 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    uses: nicolasbolt/github-templates/.github/workflows/node-build.yml@main
+    with:
+      node-version: '20'
+      upload-artifacts: true
+      artifact-name: 'build-output'
+      artifact-path: 'dist/'
+
+  # test:
+  #   needs: build
+  #   uses: nicolasbolt/github-templates/.github/workflows/node-test.yml@main
+  #   with:
+  #     node-version: '20'
+  #     test-command: 'npm test'
+  #     use-build-artifacts: true
+  #     artifact-name: 'build-output'
+  #     artifact-path: 'dist/'
+  
+  deploy:
+    needs: [build, test]
+    uses: nicolasbolt/github-templates/.github/workflows/digital-ocean-deploy.yml@main
+    with:
+      source-path: 'dist/'
+    secrets:
+      DO_HOST: ${{ secrets.DO_HOST }}
+      DO_USERNAME: ${{ secrets.DO_USERNAME }}
+      DO_SSH_KEY: ${{ secrets.DO_SSH_KEY }}
+      DO_TARGET_PATH: ${{ secrets.DO_TARGET_PATH }}
